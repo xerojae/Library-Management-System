@@ -1,0 +1,6 @@
+book1<N/>author1<N/>pub1<N/>001<N/>10<N/>20.0<N/>9<NewBook/>
+>book2<N/>author2<N/>pub2<N/>002<N/>10<N/>20.0<N/>10<NewBook/>
+>book3<N/>author3<N/>pub3<N/>003<N/>10<N/>20.0<N/>10<NewBook/>
+>book4<N/>author4<N/>pub4<N/>004<N/>10<N/>20.0<N/>10<NewBook/>
+>book5<N/>author5<N/>pub5<N/>005<N/>10<N/>20.0<N/>10<NewBook/>
+>
