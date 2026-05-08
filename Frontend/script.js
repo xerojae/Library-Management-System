@@ -1,51 +1,47 @@
 let currentRole = "";
 
-// Switch between Login and Register forms
+// Switch between login and register forms
 function toggleAuthMode() {
-    const title = document.getElementById('auth-title');
-    const isLogin = title.innerText === "Login";
-    title.innerText = isLogin ? "Register" : "Login";
-    document.getElementById('register-fields').style.display = isLogin ? "block" : "none";
+    const isLogin = document.getElementById('auth-title').innerText === "Login";
+    document.getElementById('auth-title').innerText = isLogin ? "Register" : "Login";
+    document.getElementById('reg-fields').style.display = isLogin ? "block" : "none";
 }
 
-// Show librarian code field only if librarian role is selected
-function toggleCodeField() {
+// Show code field only for librarian registration
+function toggleCodeInput() {
     const isLib = document.getElementById('userRole').value === "librarian";
     document.getElementById('libCode').style.display = isLib ? "block" : "none";
 }
 
-// Handle Login/Register and enter the system
+// Enter the system and set role
 function handleAuth() {
     const role = document.getElementById('userRole').value;
     currentRole = role;
-    
-    // Switch views
     document.getElementById('auth-page').style.display = "none";
     document.getElementById('main-system').style.display = "block";
     
-    // Show role-specific navigation
-    document.getElementById('nav-librarian').style.display = (role === "librarian") ? "block" : "none";
-    document.getElementById('nav-student').style.display = (role === "student") ? "block" : "none";
-
-    if (role === "librarian") refreshCode();
-    doSearch(); // Load books immediately
+    if (role === "librarian") {
+        document.getElementById('lib-nav').style.display = "inline-block";
+        refreshCode(); 
+    }
+    doSearch();
 }
 
-// Librarian only: Fetch the 5-minute code
+// Fetch the 5-minute code (Librarian side)
 async function refreshCode() {
     const response = await fetch('/api/librarian-code');
     const data = await response.json();
     document.getElementById('displayCode').innerText = data.code;
 }
 
-// Search interface logic
+// Fetch and search books
 async function doSearch() {
-    const query = document.getElementById('q').value.toLowerCase();
+    const query = document.getElementById('searchInput').value.toLowerCase();
     const results = document.getElementById('results');
     const response = await fetch('/api/books');
     const bookData = await response.json();
 
-    results.innerHTML = '';
+    results.innerHTML = ''; 
     bookData.filter(b => b.name.toLowerCase().includes(query)).forEach(book => {
         results.innerHTML += `
             <div class="book-card">
@@ -57,9 +53,8 @@ async function doSearch() {
     });
 }
 
+// Nav tab switcher
 function showSection(id) {
     document.querySelectorAll('.section').forEach(s => s.style.display = "none");
     document.getElementById(id).style.display = "block";
 }
-
-function logout() { location.reload(); }

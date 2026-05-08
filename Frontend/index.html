@@ -6,42 +6,39 @@
 </head>
 <body>
     <div id="auth-page">
-        <h1 id="auth-title">Login</h1>
-        <select id="userRole" onchange="toggleCodeField()">
-            <option value="student">Student</option>
-            <option value="librarian">Librarian</option>
-        </select>
-        <div id="register-fields" style="display:none;">
-            <input type="text" id="libCode" placeholder="Librarian Code" style="display:none;">
+        <div class="auth-box">
+            <h1 id="auth-title">Login</h1>
+            <input type="email" id="email" placeholder="BSU Email">
+            <input type="password" id="pass" placeholder="Password">
+            <div id="reg-fields" style="display:none;">
+                <select id="userRole" onchange="toggleCodeInput()">
+                    <option value="student">Student</option>
+                    <option value="librarian">Librarian</option>
+                </select>
+                <input type="text" id="libCode" placeholder="Enter 5-min Code" style="display:none;">
+            </div>
+            <button class="primary-btn" onclick="handleAuth()">Enter System</button>
+            <p onclick="toggleAuthMode()" style="cursor:pointer; margin-top: 15px; color: #555;">Switch Mode</p>
         </div>
-        <button onclick="handleAuth()">Enter System</button>
-        <p onclick="toggleAuthMode()">Switch Mode</p>
     </div>
 
     <div id="main-system" style="display:none;">
         <header>
-            <nav id="nav-student">
+            <nav>
                 <button onclick="showSection('search')">Search</button>
                 <button onclick="showSection('faq')">FAQ</button>
+                <button id="lib-nav" onclick="showSection('admin')" style="display:none;">Librarian Tools</button>
+                <button onclick="location.reload()">Logout</button>
             </nav>
-            <nav id="nav-librarian">
-                <button onclick="showSection('search')">Search</button>
-                <button onclick="showSection('admin')">Librarian Code</button>
-            </nav>
-            <button onclick="logout()">Logout</button>
         </header>
-
         <section id="search" class="section">
-            <input type="text" id="q" onkeyup="doSearch()" placeholder="Search...">
+            <input type="text" id="searchInput" placeholder="Search..." onkeyup="doSearch()">
             <div id="results"></div>
         </section>
-
         <section id="admin" class="section" style="display:none;">
-            <h2>Librarian Dashboard</h2>
-            <p>Registration Code: <b id="displayCode"></b> (Expires in 5 mins)</p>
-            <button onclick="refreshCode()">Refresh Code</button>
+            <h2>Admin Code: <span id="displayCode"></span></h2>
+            <button onclick="refreshCode()">Refresh</button>
         </section>
-        
         <section id="faq" class="section" style="display:none;">
             <h2>FAQ</h2>
             <p>Q: How do I borrow? A: Click borrow in the search results.</p>
