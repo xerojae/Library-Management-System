@@ -1,0 +1,20 @@
+/* Core Layout and Theme Colors */
+body { font-family: sans-serif; margin: 0; background: #f4f4f4; }
+header { background: #000; color: #F2A900; padding: 15px 5%; border-bottom: 4px solid #F2A900; }
+.header-content { display: flex; justify-content: space-between; align-items: center; }
+
+/* Navigation buttons */
+nav button { background: none; border: none; color: white; font-weight: bold; cursor: pointer; margin-left: 15px; }
+nav button:hover { color: #F2A900; }
+
+/* Search bar styling */
+.search-hero { background: white; padding: 40px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+#searchInput { width: 40%; padding: 10px; border: 2px solid #000; border-radius: 4px; }
+
+/* Section toggling logic */
+section { display: none; padding: 30px 5%; }
+section.active { display: block; }
+
+/* Results grid for book cards */
+.results-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; padding: 20px 0; }
+.book-card { background: white; padding: 15px; border-radius: 8px; border-left: 5px solid #F2A900; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
