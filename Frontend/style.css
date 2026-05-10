@@ -1,21 +1,53 @@
-/* BSU Theme Colors */
+/* --- BSU THEME VARIABLES --- */
 :root {
     --bsu-gold: #F2A900;
     --bsu-black: #000000;
-    --bsu-dark-grey: #333333;
-    --light-bg: #f8f9fa;
+    --bsu-dark-grey: #1a1a1a;
     --white: #ffffff;
-    --shadow: 0 4px 6px rgba(0,0,0,0.1);
+    --error-red: #d9534f;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    --border-radius: 8px;
 }
 
+/* --- BASE STYLES --- */
 body {
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
-    background-color: var(--light-bg);
-    color: var(--bsu-dark-grey);
+    background-color: #f4f4f4;
+    color: var(--bsu-black);
 }
 
-/* Header & Nav */
+/* --- AUTHENTICATION PAGE --- */
+#auth-page {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, var(--bsu-black) 0%, #333 100%);
+}
+
+.auth-box {
+    background: var(--white);
+    padding: 2.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.auth-box h1 { margin-bottom: 1.5rem; color: var(--bsu-black); }
+
+.auth-box input, .auth-box select {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* --- HEADER & NAVIGATION --- */
 header {
     background-color: var(--bsu-black);
     color: var(--bsu-gold);
@@ -23,11 +55,13 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 5px solid var(--bsu-gold);
+    border-bottom: 4px solid var(--bsu-gold);
     position: sticky;
     top: 0;
     z-index: 1000;
 }
+
+header .logo { font-size: 1.5rem; font-weight: bold; }
 
 nav button {
     background: none;
@@ -40,91 +74,84 @@ nav button {
     transition: color 0.3s;
 }
 
-nav button:hover {
-    color: var(--bsu-gold);
-}
+nav button:hover { color: var(--bsu-gold); }
 
-/* Auth Page Styling */
-#auth-page {
-    height: 90vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.auth-box {
-    background: var(--white);
-    padding: 2.5rem;
-    border-radius: 8px;
-    box-shadow: var(--shadow);
-    width: 100%;
-    max-width: 400px;
-    text-align: center;
-}
-
-.auth-box input, .auth-box select {
-    width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-
-/* Buttons */
-button.primary-btn {
-    background-color: var(--bsu-gold);
-    color: var(--bsu-black);
-    border: none;
-    padding: 12px 24px;
-    font-weight: bold;
-    border-radius: 4px;
-    cursor: pointer;
-    width: 100%;
-    margin-top: 10px;
-}
-
-button.primary-btn:hover {
-    background-color: #d49500;
-}
-
-/* Grid & Cards */
+/* --- LAYOUT SECTIONS --- */
 .section {
     padding: 40px 5%;
     max-width: 1200px;
     margin: auto;
 }
 
-.results-grid {
+h2 { border-left: 5px solid var(--bsu-gold); padding-left: 15px; margin-bottom: 30px; }
+
+/* --- GRID SYSTEMS --- */
+.results-grid, .dashboard-grid, .admin-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 25px;
-    margin-top: 30px;
+    margin-top: 20px;
 }
 
-.book-card {
+/* --- CARDS --- */
+.card, .book-card {
     background: var(--white);
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: var(--shadow);
-    border-top: 5px solid var(--bsu-gold);
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-top: 4px solid var(--bsu-black);
     transition: transform 0.2s;
 }
 
-.book-card:hover {
-    transform: translateY(-5px);
+.book-card:hover { transform: translateY(-5px); border-top-color: var(--bsu-gold); }
+
+.card h3, .book-card h3 { margin-top: 0; color: var(--bsu-black); }
+
+/* --- BUTTONS --- */
+button {
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    transition: opacity 0.3s;
 }
 
-.book-card h3 { margin-top: 0; color: var(--bsu-black); }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
 
-/* Search Bar */
-#searchInput {
+.primary-btn { background-color: var(--bsu-gold); color: var(--bsu-black); width: 100%; margin-top: 10px; }
+.secondary-btn { background-color: var(--bsu-black); color: var(--white); margin-top: 5px; }
+.delete-btn { background-color: var(--error-red); color: var(--white); width: 100%; }
+
+button:hover { opacity: 0.8; }
+
+/* --- LIBRARIAN SPECIFIC --- */
+.danger-zone { border-top: 4px solid var(--error-red); background-color: #fff5f5; }
+
+#audit-log {
+    background: #f9f9f9;
+    border-radius: 4px;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+/* --- FOOTER --- */
+footer {
+    text-align: center;
+    padding: 2rem;
+    background-color: #eee;
+    margin-top: 50px;
+    font-size: 0.9rem;
+}
+
+/* --- SEARCH BAR --- */
+.search-bar input {
     width: 100%;
-    max-width: 600px;
     padding: 15px;
+    font-size: 1.1rem;
     border: 2px solid var(--bsu-black);
     border-radius: 30px;
-    font-size: 1.1rem;
-    display: block;
-    margin: 0 auto 40px;
+    margin-bottom: 30px;
+    outline: none;
 }
+
+.search-bar input:focus { border-color: var(--bsu-gold); }

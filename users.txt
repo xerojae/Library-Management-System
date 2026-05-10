@@ -1,0 +1,2 @@
+librarian@bowiestate.edu<N/>1<N/>librarian@bowiestate.edu<N/>Admin<NewUser/>
+student@bowie.edu<N/>1<N/>student@bowie.edu<N/>Normal<NewUser/>

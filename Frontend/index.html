@@ -1,49 +1,181 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>BSU Digital Library</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BSU Digital Library Assistance System</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
     <div id="auth-page">
         <div class="auth-box">
-            <h1 id="auth-title">Login</h1>
+            <h1 id="auth-title">Library Login</h1>
             <input type="email" id="email" placeholder="BSU Email">
             <input type="password" id="pass" placeholder="Password">
+            
             <div id="reg-fields" style="display:none;">
+                <label for="userRole">Register As:</label>
                 <select id="userRole" onchange="toggleCodeInput()">
                     <option value="student">Student</option>
                     <option value="librarian">Librarian</option>
                 </select>
-                <input type="text" id="libCode" placeholder="Enter 5-min Code" style="display:none;">
+                <input type="text" id="libCode" placeholder="Enter Librarian Security Code" style="display:none;">
             </div>
-            <button class="primary-btn" onclick="handleAuth()">Enter System</button>
-            <p onclick="toggleAuthMode()" style="cursor:pointer; margin-top: 15px; color: #555;">Switch Mode</p>
+
+            <button class="primary-btn" id="authBtn" onclick="handleAuth()">Login</button>
+            <p id="toggleMsg" onclick="toggleAuthMode()" style="cursor:pointer; color:#555; margin-top:10px;">
+                Don't have an account? Switch to Register
+            </p>
         </div>
     </div>
 
     <div id="main-system" style="display:none;">
         <header>
+            <div class="logo">BSU Digital Library</div>
             <nav>
-                <button onclick="showSection('search')">Search</button>
-                <button onclick="showSection('faq')">FAQ</button>
-                <button id="lib-nav" onclick="showSection('admin')" style="display:none;">Librarian Tools</button>
-                <button onclick="location.reload()">Logout</button>
+                <button onclick="showSection('search-section')">Search & Browse</button>
+                <button id="student-nav" onclick="showSection('student-section')" style="display:none;">My Account</button>
+                
+                <button id="curated-nav" onclick="showSection('curated-section')" style="display:none;">Curated Courses</button>
+                <button id="support-nav" onclick="showSection('support-section')" style="display:none;">FAQ & Support</button>
+                
+                <button id="lib-nav" onclick="showSection('admin-section')" style="display:none;">Librarian Tools</button>
+                <button onclick="logout()">Logout</button>
             </nav>
         </header>
-        <section id="search" class="section">
-            <input type="text" id="searchInput" placeholder="Search..." onkeyup="doSearch()">
-            <div id="results"></div>
-        </section>
-        <section id="admin" class="section" style="display:none;">
-            <h2>Admin Code: <span id="displayCode"></span></h2>
-            <button onclick="refreshCode()">Refresh</button>
-        </section>
-        <section id="faq" class="section" style="display:none;">
-            <h2>FAQ</h2>
-            <p>Q: How do I borrow? A: Click borrow in the search results.</p>
-        </section>
+
+        <main>
+            <section id="search-section" class="section">
+                <h2>Library Catalog</h2>
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Search by title or author..." onkeyup="doSearch()">
+                </div>
+                <div id="book-results" class="results-grid">
+                    </div>
+            </section>
+
+            <section id="student-section" class="section" style="display:none;">
+                <h2>Student Dashboard</h2>
+                <div class="dashboard-grid">
+                    <div class="card">
+                        <h3>My Fines</h3>
+                        <p id="fine-display">Balance: $0.00</p>
+                        <button class="primary-btn" onclick="calculateFine()">Calculate/Update Fine</button>
+                    </div>
+                    <div class="card">
+                        <h3>Currently Borrowed</h3>
+                        <div id="borrowed-list"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="admin-section" class="section" style="display:none;">
+                <h2>Librarian Administration</h2>
+                
+                <div class="admin-grid">
+                    <div class="card">
+                        <h3>Add New Resource</h3>
+                        <input type="text" id="add-title" placeholder="Book Title">
+                        <input type="text" id="add-author" placeholder="Author">
+                        <input type="number" id="add-qty" placeholder="Quantity">
+                        <button class="primary-btn" onclick="addBook()">Add Book to System</button>
+                    </div>
+
+                    <div class="card">
+                        <h3>Remove Resource</h3>
+                        <input type="text" id="delete-title" placeholder="Exact Book Title">
+                        <button class="delete-btn" onclick="deleteBook()">Delete Book</button>
+                    </div>
+
+                    <div class="card">
+                        <h3>Manage Curated Lists</h3>
+                        
+                        <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #ddd;">
+                            <h4 style="margin-bottom: 5px;">1. Create New Course List</h4>
+                            <input type="text" id="new-list-name" placeholder="Course Name (e.g. HIST 200)">
+                            <button class="primary-btn" onclick="createCuratedList()">Create List</button>
+                        </div>
+                        
+                        <div>
+                            <h4 style="margin-bottom: 5px;">2. Add Resource to List</h4>
+                            <select id="admin-course-select" style="width: 100%; padding: 8px; margin-bottom: 10px; box-sizing: border-box;">
+                                <option value="">-- Loading Courses... --</option>
+                            </select>
+                            <input type="text" id="new-list-keyword" placeholder="Book Title or Keyword">
+                            <button class="secondary-btn" onclick="addKeywordToList()">Add to Course</button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Staff Registration Code</h3>
+                        <p>Current Code: <strong id="displayCode">0000</strong></p>
+                        <button class="secondary-btn" onclick="refreshCode()">Refresh Code</button>
+                    </div>
+
+                    <div class="card">
+                        <h3>System Audit Log</h3>
+                        <div id="audit-log" style="height:150px; overflow-y:auto; font-size:0.85rem; background:#f9f9f9; padding:10px;">
+                            </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Active Support Tickets</h3>
+                        <div id="ticket-view" style="height:150px; overflow-y:auto; font-size:0.9rem; background:#f9f9f9; padding:10px; border-radius:4px;">
+                            <p>Loading tickets...</p>
+                        </div>
+                    </div>
+
+                    <div class="card danger-zone">
+                        <h3>Danger Zone</h3>
+                        <p>Warning: This action is irreversible.</p>
+                        <button class="delete-btn" onclick="deleteAllData()">Delete All Database Data</button>
+                    </div>
+                </div>
+
+                <h3 style="margin-top:40px;">Detailed Inventory View</h3>
+                <div id="inventory-view" class="results-grid">
+                    </div>
+            </section>
+
+            <section id="curated-section" class="section" style="display:none;">
+                <h2>Curated Course Resources</h2>
+                <p>Select your course to view recommended reading materials and resources tailored to your syllabus.</p>
+                
+                <select id="course-select" onchange="loadCuratedBooks()" style="padding: 8px; margin-bottom: 15px; width: 100%; max-width: 300px;">
+                    <option value="">-- Select a Course --</option>
+                </select>
+                
+                <div id="curated-results" class="results-grid">
+                    </div>
+            </section>
+
+            <section id="support-section" class="section" style="display:none;">
+                <h2>FAQ & Support</h2>
+                
+                <div style="background: #f9f9f9; padding: 15px; border-left: 4px solid var(--bsu-gold, #FFD700); margin-bottom: 20px;">
+                    <h4>Frequently Asked Questions</h4>
+                    <p style="margin-bottom: 8px;"><strong>Q: How long can I borrow a book?</strong><br>A: All digital and physical resources have a standard borrowing period of 14 days.</p>
+                    <p style="margin-bottom: 8px;"><strong>Q: How are fines calculated?</strong><br>A: Fines accrue at a rate of $0.50 per day after the due date. Use the 'Calculate/Update Fine' button to check your balance.</p>
+                    <p style="margin-bottom: 8px;"><strong>Q: I can't find a book. What do I do?</strong><br>A: Try searching by the author's name instead of the title. If it is still missing, use the support form below to request it.</p>
+                </div>
+
+                <div class="card" style="max-width: 500px;">
+                    <h3>Contact Librarian Support</h3>
+                    <p style="font-size: 0.9rem; margin-bottom: 15px;">Still need help? Send a direct message to the administration.</p>
+                    <input type="text" id="support-subject" placeholder="Subject/Topic" style="width: 100%; padding: 8px; margin-bottom: 10px; box-sizing: border-box;">
+                    <textarea id="support-message" placeholder="Describe your issue..." style="width: 100%; height: 100px; padding: 8px; margin-bottom: 10px; box-sizing: border-box;"></textarea>
+                    <button class="primary-btn" onclick="submitSupportForm()">Submit Ticket</button>
+                </div>
+            </section>
+
+        </main>
+
+        <footer>
+            <p>&copy; 2024 Bowie State University - Digital Library Assistance System</p>
+        </footer>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
