@@ -16,6 +16,7 @@ public class LibraryGUI {
         frame.setSize(1000, 550);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
+        
 
         showLoginScreen();
         frame.setVisible(true);
@@ -26,8 +27,19 @@ public class LibraryGUI {
         frame.getContentPane().removeAll();
 
         JPanel panel = new JPanel(new GridBagLayout());
+        
+
+JLabel titleLabel = new JLabel("Bowie State Library System");
+titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+
+titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+titleLabel.setBorder(BorderFactory.createEmptyBorder(60, 0, 0, 0));
+frame.add(titleLabel, BorderLayout.NORTH);
+
         JPanel card = new JPanel(new GridLayout(6, 1, 10, 10));
         card.setPreferredSize(new Dimension(300, 280));
+
+        
 
         JTextField phone = new JTextField();
         JTextField email = new JTextField();
